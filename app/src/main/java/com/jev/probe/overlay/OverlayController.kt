@@ -316,7 +316,7 @@ class OverlayController(private val ctx: Context) {
     private fun bigButton(label: String, onClick: () -> Unit) = TextView(ctx).apply {
         text = label; textSize = 14f; gravity = Gravity.CENTER
         setTextColor(Color.WHITE); setTypeface(typeface, Typeface.BOLD)
-        background = card(12, Color.parseColor("#3A7AFE"))
+        background = card(12, Color.parseColor("#246451"))
         setPadding(dp(12), dp(11), dp(12), dp(11))
         layoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -467,7 +467,7 @@ class OverlayController(private val ctx: Context) {
             ).apply { topMargin = dp(6) }
         }
         c.addView(TextView(ctx).apply {
-            this.text = "#$rank · ${pct}%"; setTextColor(Color.parseColor("#3A7AFE")); textSize = 11f
+            this.text = "#$rank · ${pct}%"; setTextColor(Color.parseColor("#246451")); textSize = 11f
             setTypeface(typeface, Typeface.BOLD)
         })
         c.addView(TextView(ctx).apply {
@@ -485,8 +485,8 @@ class OverlayController(private val ctx: Context) {
     private fun pill(label: String, primary: Boolean, onClick: () -> Unit) = TextView(ctx).apply {
         text = label; textSize = 13f; gravity = Gravity.CENTER
         setTypeface(typeface, Typeface.BOLD)
-        setTextColor(if (primary) Color.WHITE else Color.parseColor("#3A7AFE"))
-        background = card(18, if (primary) Color.parseColor("#3A7AFE") else Color.parseColor("#FFFFFF"), stroke = !primary)
+        setTextColor(if (primary) Color.WHITE else Color.parseColor("#246451"))
+        background = card(18, if (primary) Color.parseColor("#246451") else Color.parseColor("#FFFFFF"), stroke = !primary)
         setPadding(dp(18), dp(6), dp(18), dp(6))
         layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT

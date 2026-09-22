@@ -30,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     private val a11yComponent =
         "com.jev.probe/com.google.android.accessibility.selecttospeak.SelectToSpeakService"
 
-    private val accent = Color.parseColor("#3A7AFE")
+    private val accent = Color.parseColor("#246451")
     private val green = Color.parseColor("#16A34A")
     private val red = Color.parseColor("#DC2626")
-    private val ink = Color.parseColor("#111827")
-    private val sub = Color.parseColor("#6B7280")
+    private val ink = Color.parseColor("#243C33")
+    private val sub = Color.parseColor("#65736C")
 
     private fun dp(v: Int) = TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).roundToInt()
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         prefs = Prefs(this)
-        window.decorView.setBackgroundColor(Color.parseColor("#F2F3F5"))
+        window.decorView.setBackgroundColor(Color.parseColor("#F6F5F0"))
 
         val scroll = ScrollView(this)
         container = LinearLayout(this).apply {
@@ -62,9 +62,12 @@ class MainActivity : AppCompatActivity() {
     private fun build() {
         container.removeAllViews()
 
-        container.addView(text("Jev 聊天助手", 24f, ink, bold = true))
-        container.addView(text("在聊天 App 旁读对方消息（已支持微信、QQ、X、飞书），给出判断和候选回复。发送始终由你手动点。",
-            13f, sub).apply { setPadding(0, dp(6), 0, dp(16)) })
+        container.addView(text("言伴 / 对话助手", 12f, accent, bold = true))
+        container.addView(text("想好再说，从容回应。", 28f, ink, bold = true).apply {
+            setPadding(0, dp(12), 0, dp(8))
+        })
+        container.addView(text("读懂当前对话，整理回复思路。\n微信 · QQ · X · 飞书",
+            14f, sub).apply { setPadding(0, 0, 0, dp(16)) })
 
         val a11y = isA11yEnabled()
         val overlay = Settings.canDrawOverlays(this)
@@ -74,8 +77,15 @@ class MainActivity : AppCompatActivity() {
         // Readiness card
         container.addView(statusCard(ready, a11y, overlay, key))
 
+        val toggle = bigToggle(prefs.enabled)
+        toggle.setOnClickListener {
+            prefs.enabled = !prefs.enabled
+            build()
+        }
+        container.addView(toggle)
+
         // Permission checklist
-        container.addView(sectionLabel("权限设置"))
+        container.addView(sectionLabel("01 / 连接聊天窗口"))
         container.addView(permCard("无障碍权限", "读取当前聊天窗口的消息文字", a11y) {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         })
@@ -89,18 +99,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         // Actions
-        container.addView(sectionLabel("其他"))
-        container.addView(actionRow("设置", "密钥 · 模型 · 关系 · 透明度 · 会话白名单") {
+        container.addView(sectionLabel("02 / 调整你的助手"))
+        container.addView(actionRow("模型与偏好", "配置接口、测试连通，调整回复与悬浮窗") {
             startActivity(Intent(this, SettingsActivity::class.java))
         })
-
-        // Master toggle
-        val toggle = bigToggle(prefs.enabled)
-        toggle.setOnClickListener {
-            prefs.enabled = !prefs.enabled
-            build()
-        }
-        container.addView(toggle)
+        container.addView(actionRow("知识库与联系人", "补充背景和关系，让建议更贴近你的语境") {
+            startActivity(Intent(this, KnowledgeActivity::class.java))
+        })
+        container.addView(text("建议供你参考，发送由你决定。\n分析时，对话会发送至你配置的模型接口。", 12f, sub).apply {
+            setPadding(dp(2), dp(22), dp(2), dp(12))
+        })
+        container.addView(actionRow("关于言伴", "基于 Jev 聊天助手二次开发 · 查看开源项目") {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/jev-chat/jev-chat-jarvis")))
+        })
     }
 
     // ---------------------------------------------------------------- cards
@@ -108,11 +119,21 @@ class MainActivity : AppCompatActivity() {
     private fun statusCard(ready: Boolean, a11y: Boolean, overlay: Boolean, key: Boolean): View {
         val c = cardBox()
         val head = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-        head.addView(dot(if (ready) green else red).apply {
+        head.addView(dot(if (ready && prefs.enabled) green else sub).apply {
             (layoutParams as LinearLayout.LayoutParams).rightMargin = dp(10)
         })
-        head.addView(text(if (ready) "已就绪，可以用了" else "尚未就绪", 16f, if (ready) green else ink, bold = true))
+        val completed = listOf(a11y, overlay, key).count { it }
+        val status = when {
+            !prefs.enabled -> "助手已暂停"
+            ready -> "基础配置已齐全"
+            else -> "完成准备 ${completed}/3"
+        }
+        head.addView(text(status, 16f, ink, bold = true))
         c.addView(head)
+        c.addView(text(if (ready) "请在模型与偏好中测试接口，再进入聊天窗口体验。"
+            else "按下方提示完成权限和模型配置。", 12f, sub).apply {
+            setPadding(0, dp(8), 0, dp(6))
+        })
         c.addView(checkLine("无障碍", a11y))
         c.addView(checkLine("悬浮窗", overlay))
         c.addView(checkLine("密钥", key, okWord = "已设", noWord = "未设"))
@@ -171,7 +192,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun bigToggle(on: Boolean): View {
         return TextView(this).apply {
-            text = if (on) "助手已开启 · 点击关闭" else "助手已关闭 · 点击开启"
+            text = if (on) "暂停助手" else "开启助手"
+            contentDescription = if (on) "暂停言伴助手" else "开启言伴助手"
+            minimumHeight = dp(52)
             textSize = 15f; gravity = Gravity.CENTER; setTypeface(typeface, Typeface.BOLD)
             setTextColor(if (on) Color.WHITE else accent)
             background = roundBg(dp(14), if (on) accent else Color.WHITE, stroke = !on)
@@ -211,6 +234,7 @@ class MainActivity : AppCompatActivity() {
         text = label; textSize = 13f; gravity = Gravity.CENTER; setTypeface(typeface, Typeface.BOLD)
         setTextColor(if (enabled) Color.WHITE else sub)
         background = roundBg(dp(10), if (enabled) accent else Color.parseColor("#E5E7EB"))
+        minimumHeight = dp(48)
         setPadding(dp(16), dp(8), dp(16), dp(8))
         if (enabled) setOnClickListener { onClick() }
     }

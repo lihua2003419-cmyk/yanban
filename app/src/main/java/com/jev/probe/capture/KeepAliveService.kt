@@ -23,12 +23,12 @@ class KeepAliveService : Service() {
         val channelId = "jev_keepalive"
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val ch = NotificationChannel(channelId, "Jev 助手运行中", NotificationManager.IMPORTANCE_MIN)
+            val ch = NotificationChannel(channelId, "言伴助手运行中", NotificationManager.IMPORTANCE_MIN)
             ch.setShowBadge(false)
             nm.createNotificationChannel(ch)
         }
         val notif: Notification = Notification.Builder(this, channelId)
-            .setContentTitle("Jev 助手运行中")
+            .setContentTitle("言伴助手运行中")
             .setContentText("在聊天旁读消息、给回复建议")
             .setSmallIcon(android.R.drawable.ic_menu_edit)
             .setOngoing(true)

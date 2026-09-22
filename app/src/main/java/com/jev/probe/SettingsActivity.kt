@@ -38,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
     private val worker = Executors.newSingleThreadExecutor()
     private val main = Handler(Looper.getMainLooper())
 
-    private val accent = Color.parseColor("#3A7AFE")
+    private val accent = Color.parseColor("#246451")
     private val ink = Color.parseColor("#111827")
     private val sub = Color.parseColor("#6B7280")
     private val pillOff = Color.parseColor("#EEF1F5")
@@ -54,7 +54,7 @@ class SettingsActivity : AppCompatActivity() {
         prefs = Prefs(this)
         Log.i(TAG, "settings opened judgeKey.len=${prefs.judgeKey.length}" +
             " replyKey.len=${prefs.replyKey.length} visionKey.len=${prefs.visionKey.length}")
-        window.decorView.setBackgroundColor(Color.parseColor("#F2F3F5"))
+        window.decorView.setBackgroundColor(Color.parseColor("#F6F5F0"))
 
         val scroll = ScrollView(this)
         val root = LinearLayout(this).apply {

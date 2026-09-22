@@ -37,7 +37,7 @@ class KnowledgeActivity : AppCompatActivity() {
     /** 0 = notes, 1 = contacts. */
     private var tab = 0
 
-    private val accent = Color.parseColor("#3A7AFE")
+    private val accent = Color.parseColor("#246451")
     private val ink = Color.parseColor("#111827")
     private val sub = Color.parseColor("#6B7280")
     private val pillOff = Color.parseColor("#EEF1F5")
@@ -49,7 +49,7 @@ class KnowledgeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         store = KbStore.get(this)
-        window.decorView.setBackgroundColor(Color.parseColor("#F2F3F5"))
+        window.decorView.setBackgroundColor(Color.parseColor("#F6F5F0"))
 
         val scroll = ScrollView(this)
         container = LinearLayout(this).apply {

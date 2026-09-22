@@ -1,3 +1,21 @@
+# 言伴 · Yanban
+
+基于 [Jev 聊天助手](https://github.com/jev-chat/jev-chat-jarvis) 二次开发的 Android 对话助手。当前版本以轻量界面定制为主：暖白与深绿配色、双气泡图标、首页快捷操作和更清晰的配置状态。
+
+## 当前状态
+
+- 已修改源码，并通过 XML 解析与 Git 差异检查。
+- **尚未完成 Android 编译和真机验证，不能保证改版可以正常运行。**
+- `apk/jev-assistant-v1.3-release.apk` 是保留的上游原版安装包，**不包含言伴改动**。
+- 核心采集、模型接口和回复逻辑沿用上游；消息发送仍需用户手动操作。
+- 应用包名仍为 `com.jev.probe`，尚未做独立并装配置。
+
+构建要求：JDK 17、Android SDK 35；在全英文路径下执行 `gradlew.bat assembleDebug`。模型密钥请在应用内自行配置，不要提交到仓库。
+
+保留原项目的 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。本项目不代表原作者出品或背书。以下为保留的上游说明，其截图、安装包、实测结论、赞助及联系方式均属于上游项目，不代表言伴版本已通过同样验证。
+
+---
+
 <div align="center">
 
 <img src="docs/images/logo.png" width="150" alt="Jev 聊天助手" />
